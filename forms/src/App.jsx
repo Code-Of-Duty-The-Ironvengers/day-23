@@ -46,10 +46,15 @@ const codeOfDuty = [
 ];
 
 function App() {
+  const [students, setStudents] = useState(codeOfDuty);
   const [userTextOnInput, setUserTextOnInput] = useState("");
   const [filter, setFilter] = useState("name");
 
-  const countryStudents = codeOfDuty
+  function updateStudentListForKicks(newStudent) {
+    setStudents([newStudent, ...students]);
+  }
+
+  const countryStudents = students
     .filter((student) => {
       const wantToKeep = student[filter]
         .toLowerCase()
@@ -67,7 +72,13 @@ function App() {
 
   return (
     <div className="App">
-      <InputComponenet
+      <AddStudentForm
+        // updateStudentList={updateStudentListForKicks}
+        setStudents={setStudents}
+        // students={students}
+      />
+
+      <Input
         // onChange={useWhatever}
         maxChars={20}
         onTonySwag={(evt) => {
@@ -99,7 +110,7 @@ function App() {
 
 export default App;
 
-function InputComponenet({ maxChars = 200, onTonySwag }) {
+function Input({ maxChars = 200, onTonySwag }) {
   const [input, setInput] = useState("");
 
   return (
@@ -113,5 +124,53 @@ function InputComponenet({ maxChars = 200, onTonySwag }) {
         outline: "none",
       }}
     />
+  );
+}
+
+function AddStudentForm({ setStudents, students }) {
+  const [name, setName] = useState("");
+  const [from, setFrom] = useState("");
+
+  return (
+    <div>
+      <form
+        onSubmit={(evt) => {
+          evt.preventDefault();
+          console.log("CALLED  ON SUBMIT FORM");
+        }}
+      >
+        <input
+          placeholder="What s the name?"
+          onChange={(evt) => {
+            setName(evt.target.value);
+          }}
+        />
+        <br />
+        <input
+          placeholder="Where this person from?"
+          onChange={(evt) => {
+            setFrom(evt.target.value);
+          }}
+        />
+
+        <br />
+        <button
+          type="submit"
+          onClick={() => {
+            console.log("CLICKED ON BUTTON?");
+            setStudents((doesntMatter) => [{ name, from }, ...doesntMatter]);
+          }}
+          // onClick={() => {
+          //   // props.updateStudentList({ name, from });
+          //   // setStudents([{ name, from }, ...students]);
+          //   setStudents((doesntMatter) => [{ name, from }, ...doesntMatter]);
+          //   // setFunction -> (pass the new value)
+          //   // setFunction -> (define a callback that takes the current value and returns a new value)
+          // }}
+        >
+          SUBMIT NEW PERSON
+        </button>
+      </form>
+    </div>
   );
 }
