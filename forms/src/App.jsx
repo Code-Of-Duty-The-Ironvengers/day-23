@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Component, useState } from "react";
 import "./App.css";
 
 const obj = {
@@ -45,10 +45,43 @@ const codeOfDuty = [
   },
 ];
 
+class App2 extends Component {
+  state = {
+    count: 0,
+  };
+
+  componentDidMount() {
+    console.log("COMPONENT WAS ADDED TO THE DOM");
+    // axios.get('data from db').then()
+  }
+
+  componentDidUpdate() {
+    console.log("COMPONENT JUST UPDATED");
+  }
+
+  componentWillUnmount() {
+    console.log("ABOUT TO LEAVE THIS CRUEL WORLD");
+  }
+
+  increment = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    return (
+      <div>
+        Hello from App2
+        <div onClick={this.increment}>COUNT IS {this.state.count}</div>
+      </div>
+    );
+  }
+}
+
 function App() {
   const [students, setStudents] = useState(codeOfDuty);
   const [userTextOnInput, setUserTextOnInput] = useState("");
   const [filter, setFilter] = useState("name");
+  const [on, setOn] = useState(true);
 
   function updateStudentListForKicks(newStudent) {
     setStudents([newStudent, ...students]);
@@ -72,6 +105,8 @@ function App() {
 
   return (
     <div className="App">
+      {on && <App2 />}
+      <button onClick={() => setOn(!on)}>TURNS OFF</button>
       <AddStudentForm
         // updateStudentList={updateStudentListForKicks}
         setStudents={setStudents}
@@ -160,13 +195,6 @@ function AddStudentForm({ setStudents, students }) {
             console.log("CLICKED ON BUTTON?");
             setStudents((doesntMatter) => [{ name, from }, ...doesntMatter]);
           }}
-          // onClick={() => {
-          //   // props.updateStudentList({ name, from });
-          //   // setStudents([{ name, from }, ...students]);
-          //   setStudents((doesntMatter) => [{ name, from }, ...doesntMatter]);
-          //   // setFunction -> (pass the new value)
-          //   // setFunction -> (define a callback that takes the current value and returns a new value)
-          // }}
         >
           SUBMIT NEW PERSON
         </button>
