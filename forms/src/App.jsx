@@ -1,6 +1,16 @@
 import { useState } from "react";
 import "./App.css";
 
+const obj = {
+  name: "Maxime",
+};
+
+obj.name;
+obj["name"];
+
+const aVariableThatHoldsTheStringName = "name";
+obj[aVariableThatHoldsTheStringName];
+
 const codeOfDuty = [
   { name: "Asem", from: "Syria" },
   { name: "Pelayo", from: "ESSPAIN" },
@@ -36,12 +46,72 @@ const codeOfDuty = [
 ];
 
 function App() {
+  const [userTextOnInput, setUserTextOnInput] = useState("");
+  const [filter, setFilter] = useState("name");
+
+  const countryStudents = codeOfDuty
+    .filter((student) => {
+      const wantToKeep = student[filter]
+        .toLowerCase()
+        .includes(userTextOnInput.toLowerCase());
+
+      return wantToKeep;
+    })
+    .map((student) => {
+      return (
+        <div key={student.name}>
+          {student.name} - {student.from}
+        </div>
+      );
+    });
+
   return (
     <div className="App">
-      <input />
+      <InputComponenet
+        // onChange={useWhatever}
+        maxChars={20}
+        onTonySwag={(evt) => {
+          setUserTextOnInput(evt.target.value);
+        }}
+      />
+      {/* <Input max={5} /> */}
+      <br />
+      <button
+        onClick={() => {
+          setFilter("NaMe".toLowerCase());
+        }}
+        style={{ margin: "20px 50px 20px 0" }}
+      >
+        Name
+      </button>
+      <button
+        onClick={() => {
+          setFilter("FrOm".toLowerCase());
+        }}
+      >
+        Country
+      </button>
       <div key="a key to the kingdom" />
+      {countryStudents}
     </div>
   );
 }
 
 export default App;
+
+function InputComponenet({ maxChars = 200, onTonySwag }) {
+  const [input, setInput] = useState("");
+
+  return (
+    <input
+      onChange={(e) => {
+        setInput(e.target.value);
+        onTonySwag(e);
+      }}
+      style={{
+        border: input.length >= maxChars ? "5px solid red" : "",
+        outline: "none",
+      }}
+    />
+  );
+}
