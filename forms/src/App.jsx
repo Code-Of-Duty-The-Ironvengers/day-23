@@ -1,5 +1,6 @@
 import { Component, useState, createContext, useContext } from "react";
 import "./App.css";
+import { useAddStudentForm } from "./add-student-form.hook";
 
 const obj = {
   name: "Maxime",
@@ -167,8 +168,7 @@ function Input({ maxChars = 200, onTonySwag }) {
 }
 
 function AddStudentForm({ setStudents, students }) {
-  const [name, setName] = useState("");
-  const [from, setFrom] = useState("");
+  const { name, setFrom, from, setName } = useAddStudentForm();
 
   return (
     <div>
