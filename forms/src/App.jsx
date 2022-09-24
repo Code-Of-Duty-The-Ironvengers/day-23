@@ -1,4 +1,4 @@
-import { Component, useState } from "react";
+import { Component, useState, createContext, useContext } from "react";
 import "./App.css";
 
 const obj = {
@@ -44,6 +44,9 @@ const codeOfDuty = [
     from: "I bless the rains down in AAAAFRICAAAA",
   },
 ];
+
+// Context
+// useReducer
 
 class App2 extends Component {
   state = {
@@ -105,6 +108,7 @@ function App() {
 
   return (
     <div className="App">
+      <ShowContext />
       {on && <App2 />}
       <button onClick={() => setOn(!on)}>TURNS OFF</button>
       <AddStudentForm
@@ -201,4 +205,46 @@ function AddStudentForm({ setStudents, students }) {
       </form>
     </div>
   );
+}
+
+const UserContext = createContext();
+
+function UserContextWrapper({ children }) {
+  const [user, setUser] = useState({ _id: "123l", name: "nuno" });
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+}
+
+function ShowContext() {
+  return (
+    <UserContextWrapper>
+      <div>
+        Grand grand grandparent of the one we want
+        <h1>Hello from grand grand apapa</h1>
+        <GrandParent />
+      </div>
+    </UserContextWrapper>
+  );
+}
+
+function GrandParent() {
+  return (
+    <div>
+      <h1>Hello from grand parent</h1>
+      <Parent />
+    </div>
+  );
+}
+
+function Parent() {
+  return (
+    <div>
+      <h1>Hi from Parent</h1>
+      <TargetChild />
+    </div>
+  );
+}
+
+function TargetChild() {
+  const user = useContext(UserContext);
+  return <div>Hey there {user.name}</div>;
 }
